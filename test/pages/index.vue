@@ -75,14 +75,14 @@ var credentials={
 }
 
 let signin_url = `https://developer.api.autodesk.com/authentication/v1/authorize?response_type=token&client_id=${FORGE_CLIENT_ID}&redirect_uri=${REDIRECT_URL}&scope=${scope}`;
-let hubs;
+let hubss;
 //console.log(signin_url);
  try{
   authorizationCode=url.hash;
   credentials.access_token = authorizationCode.replace(/(#access_token=)|&[\s\S]+/g,'');
-  hubs= HubsApi.getHubs({}, oAuth2ThreeLegged, credentials).then((hubs) => {
-	//console.log(hub);
-	return hubs})
+  hubss= HubsApi.getHubs({}, oAuth2ThreeLegged, credentials).then((hubs) => 
+
+	JSON.stringify(hubs.body)).then((body) => { return JSON.parse(body);})
   
  }
   
@@ -90,6 +90,11 @@ let hubs;
  	authorizationCode='error';
  }
 
-console.log(hubs);
+const temp = async () => {
+		const a = await hubss;
+		return a;
+	};
+
+console.log(temp());
 
 </script>

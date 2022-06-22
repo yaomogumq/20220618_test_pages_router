@@ -7,9 +7,7 @@
     <button><a class="text-gray-800" :href="signin_url"> Click me to sign in </a> </button>
     </div>
     <div>
-        <p id="response"></p>
-        
-        
+     
     </div>
   </div>
   
@@ -59,6 +57,7 @@ button {
 <script setup>
 import Sidebar from '~/components/Sidebar';
 import ForgeSDK from 'forge-apis';
+
 var HubsApi = new ForgeSDK.HubsApi(); //Hubs Client
 
 var url = new URL(document.URL);
@@ -76,24 +75,21 @@ var credentials={
 }
 
 let signin_url = `https://developer.api.autodesk.com/authentication/v1/authorize?response_type=token&client_id=${FORGE_CLIENT_ID}&redirect_uri=${REDIRECT_URL}&scope=${scope}`;
-let test;
+let hubs;
 //console.log(signin_url);
-try{
+ try{
   authorizationCode=url.hash;
   credentials.access_token = authorizationCode.replace(/(#access_token=)|&[\s\S]+/g,'');
-  HubsApi.getHubs({}, oAuth2ThreeLegged, credentials).then(function(hubs) 
-      {
-         console.log((hubs));
-         let response = document.getElementById("response")
-         //response=hubs.json();
-      }
-    )
-  }
-catch(err){
- authorizationCode='error';
-}
+  hubs= HubsApi.getHubs({}, oAuth2ThreeLegged, credentials).then((hubs) => {
+	//console.log(hub);
+	return hubs})
+  
+ }
+  
+ catch(err){
+ 	authorizationCode='error';
+ }
 
-
-
+console.log(hubs);
 
 </script>

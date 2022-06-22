@@ -5,10 +5,11 @@
     <div>
     <h1>hi</h1>
     <button><a class="text-gray-800" :href="signin_url"> Click me to sign in </a> </button>
+	 <pre>{{hubs}}hihi</pre>
     </div>
-    <div>
-     
-    </div>
+    
+    
+    
   </div>
   
   
@@ -82,8 +83,8 @@ let hubs;
   credentials.access_token = authorizationCode.replace(/(#access_token=)|&[\s\S]+/g,'');
   hubs= await HubsApi.getHubs({}, oAuth2ThreeLegged, credentials).then((hubs) => 
 
-	JSON.stringify(hubs.body.data)).then((body) => { return JSON.parse(body);})
-  
+	 JSON.stringify(hubs.body.data)).then((body) => { return JSON.parse(body);})
+    //hubs.body.data[1].attributes.name
  }
   
  catch(err){

@@ -88,7 +88,7 @@ var credentials={
   access_token:''
 }
 let signin_url = `https://developer.api.autodesk.com/authentication/v1/authorize?response_type=token&client_id=${FORGE_CLIENT_ID}&redirect_uri=${REDIRECT_URL}&scope=${scope}`;
-let hubs = ref(null);
+let hubs = reactive("name");
 //console.log(signin_url);
 
 
@@ -99,7 +99,7 @@ let hubs = ref(null);
   credentials.access_token = authorizationCode.replace(/(#access_token=)|&[\s\S]+/g,'');
   hubs= await HubsApi.getHubs({}, oAuth2ThreeLegged, credentials).then((hubs) => 
 
-	 JSON.stringify(hubs.body.data[0].attributes)).then((body) => { return JSON.parse(body);})
+	 JSON.stringify(hubs.body.data[1].attributes)).then((body) => { return JSON.parse(body);})
 	 
 	//  return treeData;
     //hubs.body.data[1].attributes.name

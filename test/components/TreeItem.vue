@@ -31,9 +31,9 @@ function addChild() {
   <li>
     <div
       :class="{ bold: isFolder }"
-      @click="toggle"
-      @dblclick="changeType">
-      {{ model.name }}
+      @click="toggle">
+      <!-- @dblclick="changeType"> -->
+      {{ model }} 
       <span v-if="isFolder">[{{ isOpen ? '-' : '+' }}]</span>
     </div>
     <ul v-show="isOpen" v-if="isFolder">
@@ -46,7 +46,7 @@ function addChild() {
         v-for="model in model.children"
         :model="model">
       </TreeItem>
-      <li class="add" @click="addChild">+</li>
+      <!-- <li class="add" @click="addChild">+</li> -->
     </ul>
   </li>
 </template>

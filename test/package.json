@@ -14,6 +14,9 @@
     "forge-apis": "^0.9.0",
     "node-sass": "^7.0.1",
     "sass": "^1.52.3",
-    "sass-loader": "^13.0.0"
+    "sass-loader": "^13.0.0",
+    "vue-json-tree-view": "^2.1.6",
+    "vue-json-viewer": "^2.2.22",
+    "vuejs-tree": "^3.0.2"
   }
 }

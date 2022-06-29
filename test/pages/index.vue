@@ -5,7 +5,7 @@
     <div class="content">
     <h1>hi</h1>
     <button><a class="text-gray-800" :href="signin_url"> Click me to sign in </a> </button> 
-	<JsonTreeView :data="hubs" :maxDepth="3" @selected="log(this)" />
+	<JsonTreeView :data="hubs" :maxDepth="3" @selected="log(this.key)" />
 	<!-- <pre>{{hubs}}</pre> -->
     </div>
     
@@ -92,7 +92,7 @@ var credentials={
   access_token:''
 }
 let signin_url = `https://developer.api.autodesk.com/authentication/v1/authorize?response_type=token&client_id=${FORGE_CLIENT_ID}&redirect_uri=${REDIRECT_URL}&scope=${scope}`;
-let hubs = reactive("name");
+let hubs = reactive("{}");
 //console.log(signin_url);
 
 

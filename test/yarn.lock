@@ -1321,7 +1321,7 @@ cli-width@^3.0.0:
   resolved "https://registry.yarnpkg.com/cli-width/-/cli-width-3.0.0.tgz#a2f48437a2caa9a22436e794bf071ec9e61cedf6"
   integrity sha512-FxqpkPPwu1HjuN93Omfm4h8uIanXofW0RxVEW3k5RKx+mJJYSthzNhp32Kzxxy3YAEZ/Dc/EWN1vZRY0+kOhbw==
 
-clipboard@^2.0.4:
+clipboard@^2.0.10:
   version "2.0.11"
   resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.11.tgz#62180360b97dd668b6b3a84ec226975762a70be5"
   integrity sha512-C+0bbOqkezLIsmWSvlsXS0Q0bmkugu7jcfMIACB+RDEntIzQIkdr148we28AfSloQLRdZlYL/QYyrq05j/3Faw==
@@ -1485,10 +1485,10 @@ cookiejar@^2.1.3:
   resolved "https://registry.yarnpkg.com/cookiejar/-/cookiejar-2.1.3.tgz#fc7a6216e408e74414b90230050842dacda75acc"
   integrity sha512-JxbCBUdrfr6AQjOXrxoTvAMJO4HBTUIlBzslcJPAz+/KT8yk53fXun51u+RenNYvad/+Vc2DIz5o9UxlCDymFQ==
 
-core-js@^3.6.5:
-  version "3.23.2"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.23.2.tgz#e07a60ca8b14dd129cabdc3d2551baf5a01c76f0"
-  integrity sha512-ELJOWxNrJfOH/WK4VJ3Qd+fOqZuOuDNDJz0xG6Bt4mGg2eO/UT9CljCrbqDGovjLKUrGajEEBcoTOc0w+yBYeQ==
+core-js@^3.18.0:
+  version "3.23.3"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.23.3.tgz#3b977612b15da6da0c9cc4aec487e8d24f371112"
+  integrity sha512-oAKwkj9xcWNBAvGbT//WiCdOMpb9XQG92/Fe3ABFM/R16BsHgePG00mFOgKf7IsCtfj8tA1kHtf/VwErhriz5Q==
 
 core-util-is@1.0.2:
   version "1.0.2"
@@ -2991,6 +2991,15 @@ json-stringify-safe@~5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   integrity sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==
+
+json-tree-view-vue3@^0.1.16:
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/json-tree-view-vue3/-/json-tree-view-vue3-0.1.16.tgz#0fe9793cea51e12cf5cd74a8819631a06988ec4e"
+  integrity sha512-Jm0ONEEIgYf0H+cQnICXSyUVbxRyA4h3/I3bX5eRky0rExy2s2q6SwLlEo4Ua67RU7wq5fhxLcJcUR6WT2+Xdg==
+  dependencies:
+    core-js "^3.18.0"
+    switch-ts "^1.0.8"
+    vue "^3.2.16"
 
 json5@^2.1.2, json5@^2.2.1:
   version "2.2.1"
@@ -5125,6 +5134,11 @@ svgo@^2.7.0:
     picocolors "^1.0.0"
     stable "^0.1.8"
 
+switch-ts@^1.0.8:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/switch-ts/-/switch-ts-1.0.9.tgz#e0ca7cdbc1011bec2c683368aaa82918b0a63a8f"
+  integrity sha512-wvHKEC7EhDBC1g02RpPPLpVG0xwdofxSE0wxwqqfJAo8OGDC5wdjgKRAAZbh0s5lozT5qF5+EftG35+hENirzQ==
+
 table@^6.8.0:
   version "6.8.0"
   resolved "https://registry.yarnpkg.com/table/-/table-6.8.0.tgz#87e28f14fa4321c3377ba286f07b79b281a3b3ca"
@@ -5552,11 +5566,6 @@ vue-bundle-renderer@^0.3.9:
   dependencies:
     bundle-runner "^0.0.1"
 
-vue-class-component@^8.0.0-0:
-  version "8.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-8.0.0-rc.1.tgz#db692cd97656eb9a08206c03d0b7398cdb1d9420"
-  integrity sha512-w1nMzsT/UdbDAXKqhwTmSoyuJzUXKrxLE77PCFVuC6syr8acdFDAq116xgvZh9UCuV0h+rlCtxXolr3Hi3HyPQ==
-
 vue-json-tree-view@^2.1.6:
   version "2.1.6"
   resolved "https://registry.yarnpkg.com/vue-json-tree-view/-/vue-json-tree-view-2.1.6.tgz#a153ac1b18432b8671c65930f545ce134e38cf2d"
@@ -5565,13 +5574,6 @@ vue-json-tree-view@^2.1.6:
     lodash "^4.17.4"
     vue "^2.5.16"
 
-vue-json-viewer@^2.2.22:
-  version "2.2.22"
-  resolved "https://registry.yarnpkg.com/vue-json-viewer/-/vue-json-viewer-2.2.22.tgz#7ea7454b8aac3701245b88acf39de876cc54221e"
-  integrity sha512-3oPH5BxoUWva/qp7wNJj+15FBXyi9Yu5VDW4mCWivjHR1pUpMv34fjqqxML7jh2uOqm1S/3Xks5nQ5JjC5+OWw==
-  dependencies:
-    clipboard "^2.0.4"
-
 vue-router@^4.0.16:
   version "4.0.16"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.0.16.tgz#9477beeeef36e80e04d041a1738801a55e6e862e"
@@ -5579,12 +5581,24 @@ vue-router@^4.0.16:
   dependencies:
     "@vue/devtools-api" "^6.0.0"
 
+vue3-json-viewer@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/vue3-json-viewer/-/vue3-json-viewer-2.2.2.tgz#43a512f378c602bb6b7f2a72adeaf7d15b443885"
+  integrity sha512-56l3XDGggnpwEqZieXsSMhNT4NhtO6d7zuSAxHo4i0UVxymyY2jRb7UMQOU1ztChKALZCAzX7DlgrsnEhxu77A==
+  dependencies:
+    clipboard "^2.0.10"
+
+vue3-tree-vue@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/vue3-tree-vue/-/vue3-tree-vue-1.0.15.tgz#a0170d46d4adeb3d740ed557fd330891f0bd0240"
+  integrity sha512-35f1eFLP8Fqa8pbRbnyon0nIJefNT3Y6pPD3ceY1pe0K9uLZy9o1RPjVye7rpso03fL8Yk7fUfJzAStca42Weg==
+
 vue@^2.5.16:
   version "2.6.14"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
 
-vue@^3.0.0, vue@^3.2.37:
+vue@^3.2.16, vue@^3.2.37:
   version "3.2.37"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.37.tgz#da220ccb618d78579d25b06c7c21498ca4e5452e"
   integrity sha512-bOKEZxrm8Eh+fveCqS1/NkG/n6aMidsI6hahas7pa0w/l7jkbssJVsRhVDs07IdDq7h9KHswZOgItnwJAgtVtQ==
@@ -5594,15 +5608,6 @@ vue@^3.0.0, vue@^3.2.37:
     "@vue/runtime-dom" "3.2.37"
     "@vue/server-renderer" "3.2.37"
     "@vue/shared" "3.2.37"
-
-vuejs-tree@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/vuejs-tree/-/vuejs-tree-3.0.2.tgz#b6e019fbeaec745752fa5f53da487b98be405e49"
-  integrity sha512-jQpDebY83CoO2ANSmwXBoV+3uJj51wsFb03SMw5tuniD0D3xiTv1zZ46EIS/fdXnehs7dzvH42HnUtGA7L0sRA==
-  dependencies:
-    core-js "^3.6.5"
-    vue "^3.0.0"
-    vue-class-component "^8.0.0-0"
 
 wcwidth@^1.0.1:
   version "1.0.1"

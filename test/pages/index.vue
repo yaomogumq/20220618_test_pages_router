@@ -4,9 +4,9 @@
     <sidebar/>
     <div class="content">
     <h1>hi</h1>
-    <button><a class="text-gray-800" :href="signin_url"> Click me to sign in </a> </button>
-	<p><TreeItem class="item" :model="treeData"></TreeItem></p>
-	<pre>{{hubs}}</pre>
+    <button><a class="text-gray-800" :href="signin_url"> Click me to sign in </a> </button> 
+	<JsonTreeView :data="hubs" :maxDepth="3" @selected="log(this)" />
+	<!-- <pre>{{hubs}}</pre> -->
     </div>
     
     
@@ -17,6 +17,7 @@
 </template>
 
 <style lang="scss">
+
 :root {
 	--primary: #3759c9;
 	--primary-alt: #22c55e;
@@ -64,13 +65,16 @@ button {
 
 </style>
 
-<script setup>
+<script setup lang="ts">
 import Sidebar from '~/components/Sidebar';
 import ForgeSDK from 'forge-apis';
 import {ref} from 'vue';
-import TreeItem from '~/components/TreeItem';
+import { JsonTreeView } from "json-tree-view-vue3";
 
 
+function log(key){
+	console.log(key)//JSON.parse(this.hubs).key)
+}
 
 
 var HubsApi = new ForgeSDK.HubsApi(); //Hubs Client
@@ -99,7 +103,7 @@ let hubs = reactive("name");
   credentials.access_token = authorizationCode.replace(/(#access_token=)|&[\s\S]+/g,'');
   hubs= await HubsApi.getHubs({}, oAuth2ThreeLegged, credentials).then((hubs) => 
 
-	 JSON.stringify(hubs.body.data[1].attributes)).then((body) => { return JSON.parse(body);})
+	 JSON.stringify(hubs.body.data[1])).then((body) => { return (body);})
 	 
 	//  return treeData;
     //hubs.body.data[1].attributes.name
@@ -110,9 +114,9 @@ let hubs = reactive("name");
  	authorizationCode='error';
  }
 
-const treeData = ref(hubs);
-//return hubs;
+
 
 </script>
+
 
 

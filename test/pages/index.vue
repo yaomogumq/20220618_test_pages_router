@@ -5,7 +5,7 @@
     <div class="content">
     <h1>hi</h1>
     <button><a class="text-gray-800" :href="signin_url"> Click me to sign in </a> </button> 
-	<JsonTreeView :data="hubs" :maxDepth="3" @selected="log(this.key)" />
+	<JsonTreeView :data="state.json" :maxDepth="3" @selected="onSelected" />
 	<!-- <pre>{{hubs}}</pre> -->
     </div>
     
@@ -68,13 +68,8 @@ button {
 <script setup lang="ts">
 import Sidebar from '~/components/Sidebar';
 import ForgeSDK from 'forge-apis';
-import {ref} from 'vue';
 import { JsonTreeView } from "json-tree-view-vue3";
-
-
-function log(key){
-	console.log(key)//JSON.parse(this.hubs).key)
-}
+import { defineComponent, reactive, ref } from "vue";
 
 
 var HubsApi = new ForgeSDK.HubsApi(); //Hubs Client
@@ -92,7 +87,7 @@ var credentials={
   access_token:''
 }
 let signin_url = `https://developer.api.autodesk.com/authentication/v1/authorize?response_type=token&client_id=${FORGE_CLIENT_ID}&redirect_uri=${REDIRECT_URL}&scope=${scope}`;
-let hubs = reactive("{}");
+let hubs = "{}";
 //console.log(signin_url);
 
 
@@ -114,6 +109,17 @@ let hubs = reactive("{}");
  	authorizationCode='error';
  }
 
+let state = reactive({
+      json: hubs
+    });
+
+function onSelected(event: unknown) {
+	 let temp = JSON.parse(state.json);
+         temp['number'] = {"apple": "hi"};
+         state.json= JSON.stringify(temp) ;
+		 console.log(state.json)
+	}
+	
 
 
 </script>

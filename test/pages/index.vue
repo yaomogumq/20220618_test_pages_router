@@ -4,8 +4,12 @@
     <sidebar/>
     <div class="content">
     <h1>hi</h1>
-    <button><a class="text-gray-800" :href="signin_url"> Click me to sign in </a> </button> 
-	<JsonTreeView :data="state.json" :maxDepth="3" @selected="onSelected" />
+    <button><a class="text-gray-800" :href="signin_url"> Click me to sign in </a> </button>
+	<div>
+	<button @click="gethub">GET HUB</button>
+	<JsonTreeView :data="state" :maxDepth="3" @selected="onSelected" />	
+	</div>
+	
 	<!-- <pre>{{hubs}}</pre> -->
     </div>
     
@@ -66,16 +70,20 @@ button {
 </style>
 
 <script setup lang="ts">
-import Sidebar from '~/components/Sidebar';
+import Sidebar from '~/components/sidebar';
 import ForgeSDK from 'forge-apis';
 import { JsonTreeView } from "json-tree-view-vue3";
 import { defineComponent, reactive, ref } from "vue";
 
 
+//define forge api tools
 var HubsApi = new ForgeSDK.HubsApi(); //Hubs Client
-var url = new URL(document.URL);
-var authorizationCode = 'null';
-var FORGE_CLIENT_ID = 'ovVGST7XyRDWeIyGUdYCmgtZF6IvVYZ4', FORGE_CLIENT_SECRET = 'T8ec853f398e', REDIRECT_URL = 'http://localhost:3000';
+var ProjectsApi = new ForgeSDK.ProjectsApi();
+var FoldersApi = new ForgeSDK.FoldersApi();
+var ItemsApi = new ForgeSDK.ItemsApi();
+var url = document.URL;
+
+var FORGE_CLIENT_ID = 'ovVGST7XyRDWeIyGUdYCmgtZF6IvVYZ4', FORGE_CLIENT_SECRET = 'T8ec853f398e3406', REDIRECT_URL = 'http://localhost:3001';
 // Initialize the 3-legged OAuth2 client, set specific scopes and optionally set the `autoRefresh` parameter to true
 // if you want the token to auto refresh
 var scope='data:read';
@@ -83,43 +91,70 @@ var autoRefresh = true;
 var oAuth2ThreeLegged = new ForgeSDK.AuthClientThreeLegged(FORGE_CLIENT_ID, FORGE_CLIENT_SECRET, REDIRECT_URL, [
     `${scope}`
 ], autoRefresh);
-var credentials={
-  access_token:''
-}
-let signin_url = `https://developer.api.autodesk.com/authentication/v1/authorize?response_type=token&client_id=${FORGE_CLIENT_ID}&redirect_uri=${REDIRECT_URL}&scope=${scope}`;
-let hubs = "{}";
-//console.log(signin_url);
+let signin_url = `https://developer.api.autodesk.com/authentication/v1/authorize?response_type=code&client_id=${FORGE_CLIENT_ID}&redirect_uri=${REDIRECT_URL}&scope=${scope}`;
+const credentials = ref({});
+const hubs = ref({});
 
 
+const authorizationCode = url.split('?code=')[1];
+
+credentials.value =  await oAuth2ThreeLegged.getToken(authorizationCode).then((credentials) =>{
+   return credentials; // The `credentials` object contains an `access_token` and an optional `refresh_token` that you can use to call the endpoints.
+}, function(err){
+    console.error(err);
+});
+
+ hubs.value =  await HubsApi.getHubs({}, oAuth2ThreeLegged, credentials.value).then((hubs) =>{
+    return hubs;
+}, function(err){
+     console.error(err);
+});
+
+var state = JSON.stringify(hubs.value);
+//console.log(credentials.value);
+// const state = JSON.stringify(treeview);
+
+// function onSelected(event: unknown){
+// 		console.log(event.value)
+// 	}
+// try{
+// 	console.log(state.header)
+// }
+// catch(err){
+// 	console.log(err)
+// }
+// const state =  reactive({
+// 	json: JSON.stringify(hubs)
+// });
 
 
- try{
-  authorizationCode=url.hash;
-  credentials.access_token = authorizationCode.replace(/(#access_token=)|&[\s\S]+/g,'');
-  hubs= await HubsApi.getHubs({}, oAuth2ThreeLegged, credentials).then((hubs) => 
-
-	 JSON.stringify(hubs.body.data[1])).then((body) => { return (body);})
-	 
-	//  return treeData;
-    //hubs.body.data[1].attributes.name
+// function onSelected(event: unknown) {
+// 	 let temp = JSON.parse(state.json);
+//          temp['number'] = {"apple": "hi"};
+//          state.json= JSON.stringify(temp) ;
+// 		 console.log(state.json)
+// 	}
 	
- }
-
- catch(err){
- 	authorizationCode='error';
- }
-
-let state = reactive({
-      json: hubs
-    });
-
-function onSelected(event: unknown) {
-	 let temp = JSON.parse(state.json);
-         temp['number'] = {"apple": "hi"};
-         state.json= JSON.stringify(temp) ;
-		 console.log(state.json)
-	}
+// const  gethub= (url) => {
+// 	try{
+// 	authorizationCode=new URL(url).hash;
+// 	credentials.access_token = authorizationCode.replace(/(#access_token=)|&[\s\S]+/g,'');
+// 	alert(credentials.access_token)
+// 	}
+// 	catch(err){
+// 		authorizationCode='error';
+// 	}
 	
+// }
+
+
+	// var hubs= async()=>await HubsApi.getHubs({}, oAuth2ThreeLegged, credentials).then((hubs) => 
+	// 	JSON.stringify(hubs.body.data[1])).then((body) => { return (body);})
+
+ 
+
+
+
 
 
 </script>

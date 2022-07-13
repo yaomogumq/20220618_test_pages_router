@@ -105,10 +105,18 @@ credentials.value =  await oAuth2ThreeLegged.getToken(authorizationCode).then((c
 });
 
  hubs.value =  await HubsApi.getHubs({}, oAuth2ThreeLegged, credentials.value).then((hubs) =>{
-    return hubs;
+	let newtree={};
+	for (const i in hubs.body.data){
+	 newtree[i]={id:hubs.body.data[i].id
+	 ,name:hubs.body.data[i].attributes.name};
+	}			
+    return newtree;
 }, function(err){
      console.error(err);
 });
+
+
+console.log(hubs.value)
 
 var state = JSON.stringify(hubs.value);
 //console.log(credentials.value);

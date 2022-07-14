@@ -119,6 +119,7 @@ credentials.value =  await oAuth2ThreeLegged.getToken(authorizationCode).then((c
 console.log(hubs.value)
 
 var state = reactive({json:JSON.stringify(hubs.value)});
+
 //console.log(credentials.value);
 // const state = JSON.stringify(treeview);
 
@@ -136,16 +137,25 @@ var state = reactive({json:JSON.stringify(hubs.value)});
 // });
 
 const num = ref(0);
-function onSelected(event: unknown) {
+async function onSelected (event: unknown) {
 
 	
-	 let temp = JSON.parse(state.json);
+	let temp = JSON.parse(state.json);
+	
         //  temp[`A+${num.value}`] = {"apple": num.value++};
-		temp[event.path[2]].folder={"id": event.value};
+	try{
+		var Projects = await ProjectsApi.getHubProjects(event.value, {}, oAuth2ThreeLegged, credentials.value).then((Projects)=>
+		{return Projects});
+		console.log(Projects);
+	}
+	catch(err){
+		console.log(err);
+	}
 
-		
-         state.json= JSON.stringify(temp) ;
-		 console.log(event)
+	temp[event.path[2]].project={"project": Projects};
+
+	state.json= JSON.stringify(temp) ;
+	console.log(event)
 	}
 	
 // const  gethub= (url) => {

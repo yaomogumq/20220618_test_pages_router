@@ -6,8 +6,8 @@
     <h1>hi</h1>
     <button><a class="text-gray-800" :href="signin_url"> Click me to sign in </a> </button>
 	<div>
-	<button @click="gethub">GET HUB</button>
-	<JsonTreeView :data="state" :maxDepth="3" @selected="onSelected" />	
+	<!-- <button @click="gethub">GET HUB</button> -->
+	<JsonTreeView :data="state.json" :maxDepth="3" @selected="onSelected" />	
 	</div>
 	
 	<!-- <pre>{{hubs}}</pre> -->
@@ -107,8 +107,8 @@ credentials.value =  await oAuth2ThreeLegged.getToken(authorizationCode).then((c
  hubs.value =  await HubsApi.getHubs({}, oAuth2ThreeLegged, credentials.value).then((hubs) =>{
 	let newtree={};
 	for (const i in hubs.body.data){
-	 newtree[i]={id:hubs.body.data[i].id
-	 ,name:hubs.body.data[i].attributes.name};
+	 newtree[i]={hub:{id:hubs.body.data[i].id
+	 ,name:hubs.body.data[i].attributes.name}};
 	}			
     return newtree;
 }, function(err){
@@ -118,7 +118,7 @@ credentials.value =  await oAuth2ThreeLegged.getToken(authorizationCode).then((c
 
 console.log(hubs.value)
 
-var state = JSON.stringify(hubs.value);
+var state = reactive({json:JSON.stringify(hubs.value)});
 //console.log(credentials.value);
 // const state = JSON.stringify(treeview);
 
@@ -135,13 +135,18 @@ var state = JSON.stringify(hubs.value);
 // 	json: JSON.stringify(hubs)
 // });
 
+const num = ref(0);
+function onSelected(event: unknown) {
 
-// function onSelected(event: unknown) {
-// 	 let temp = JSON.parse(state.json);
-//          temp['number'] = {"apple": "hi"};
-//          state.json= JSON.stringify(temp) ;
-// 		 console.log(state.json)
-// 	}
+	
+	 let temp = JSON.parse(state.json);
+        //  temp[`A+${num.value}`] = {"apple": num.value++};
+		temp[event.path[2]].folder={"id": event.value};
+
+		
+         state.json= JSON.stringify(temp) ;
+		 console.log(event)
+	}
 	
 // const  gethub= (url) => {
 // 	try{

@@ -1,4 +1,5 @@
 <template>
+	
   <div class="app">
     
     <sidebar/>
@@ -116,48 +117,81 @@ credentials.value =  await oAuth2ThreeLegged.getToken(authorizationCode).then((c
 });
 
 
-console.log(hubs.value)
+var createNestedObject = function( base, names, value ) {
+    // If a value is given, remove the last name and keep it for later:
+    var lastName = arguments.length === 3 ? names.pop() : false;
+
+    // Walk the hierarchy, creating new objects where needed.
+    // If the lastName was removed, then the last object is not set yet:
+    for( var i = 0; i < names.length; i++ ) {
+        base = base[ names[i] ] = base[ names[i] ] || {};
+    }
+
+    // If a value was given, set it to the last name:
+    if( lastName ) base = base[ lastName ] = value;
+
+    // Return the last object in the hierarchy:
+    return base;
+};
+
+
 
 var state = reactive({json:JSON.stringify(hubs.value)});
 
-//console.log(credentials.value);
-// const state = JSON.stringify(treeview);
 
-// function onSelected(event: unknown){
-// 		console.log(event.value)
-// 	}
-// try{
-// 	console.log(state.header)
-// }
-// catch(err){
-// 	console.log(err)
-// }
-// const state =  reactive({
-// 	json: JSON.stringify(hubs)
-// });
-
-const num = ref(0);
 async function onSelected (event: unknown) {
 
 	
 	let temp = JSON.parse(state.json);
 	
-        //  temp[`A+${num.value}`] = {"apple": num.value++};
-	try{
-		var Projects = await ProjectsApi.getHubProjects(event.value, {}, oAuth2ThreeLegged, credentials.value).then((Projects)=>
-		{return Projects});
-		console.log(Projects);
-	}
-	catch(err){
-		console.log(err);
-	}
+	switch(true){
 
-	temp[event.path[2]].project={"project": Projects};
+		case event.path.includes("hub") && event.path.includes("id") && !event.path.includes("projects"):
+
+		try{
+				var Projects = await ProjectsApi.getHubProjects(event.value, {}, oAuth2ThreeLegged, credentials.value).then((Projects)=>
+				
+				{let newtree={};
+				for (const i in Projects.body.data){
+				newtree[i]={Project:{id:Projects.body.data[i].id
+				,name:Projects.body.data[i].attributes.name}};
+				}			
+				return newtree;});
+				
+			}
+			catch(err){
+				console.log(err);
+			}
+
+			createNestedObject(temp, [event.path.match(/\d+/g)?.[0],'hub','projects'], {"projects": Projects});
+			
+			break;
+		
+		case event.path.includes("project") && event.path.includes("id"):
+		
+		
+		try{
+				var Folders = await ProjectsApi.getProjectTopFolders(hubs.value[event.path[2]].hub.id, event.value, oAuth2ThreeLegged, credentials.value).then((Folders)=>
+				{return Folders});
+				
+			}
+			catch(err){
+				console.log(err);
+			}
+			
+			
+			createNestedObject(temp, [event.path[2],'hub','projects','projects',event.path.match(/\d+/g)?.[1],"Folders"], {"Folders": Folders}); ;
+			break;
+	
+
+	  }
+
+
+	
 
 	state.json= JSON.stringify(temp) ;
-	console.log(event)
-	}
 	
+}
 // const  gethub= (url) => {
 // 	try{
 // 	authorizationCode=new URL(url).hash;

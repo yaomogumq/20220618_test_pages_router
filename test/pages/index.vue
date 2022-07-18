@@ -87,7 +87,7 @@ var url = document.URL;
 var FORGE_CLIENT_ID = 'ovVGST7XyRDWeIyGUdYCmgtZF6IvVYZ4', FORGE_CLIENT_SECRET = 'T8ec853f398e3406', REDIRECT_URL = 'http://localhost:3001';
 // Initialize the 3-legged OAuth2 client, set specific scopes and optionally set the `autoRefresh` parameter to true
 // if you want the token to auto refresh
-var scope='data:read';
+var scope="data:read";
 var autoRefresh = true;
 var oAuth2ThreeLegged = new ForgeSDK.AuthClientThreeLegged(FORGE_CLIENT_ID, FORGE_CLIENT_SECRET, REDIRECT_URL, [
     `${scope}`
@@ -95,7 +95,6 @@ var oAuth2ThreeLegged = new ForgeSDK.AuthClientThreeLegged(FORGE_CLIENT_ID, FORG
 let signin_url = `https://developer.api.autodesk.com/authentication/v1/authorize?response_type=code&client_id=${FORGE_CLIENT_ID}&redirect_uri=${REDIRECT_URL}&scope=${scope}`;
 const credentials = ref({});
 const hubs = ref({});
-
 
 const authorizationCode = url.split('?code=')[1];
 
@@ -138,23 +137,43 @@ var createNestedObject = function( base, names, value ) {
 
 var state = reactive({json:JSON.stringify(hubs.value)});
 
+let _project;
 
 async function onSelected (event: unknown) {
 
 	
 	let temp = JSON.parse(state.json);
-	
 	switch(true){
 
 		case event.path.includes("hub") && event.path.includes("id") && !event.path.includes("projects"):
 
+			try{
+					var Projects = await ProjectsApi.getHubProjects(event.value, {}, oAuth2ThreeLegged, credentials.value).then((Projects)=>
+					
+					{let newtree={};
+					for (const i in Projects.body.data){
+					newtree[i]={Project:{id:Projects.body.data[i].id
+					,name:Projects.body.data[i].attributes.name}};
+					}			
+					return newtree;});
+					
+				}
+				catch(err){
+					console.log(err);
+				}
+				createNestedObject(temp, [event.path.match(/\d+/g)?.[0],'hub','projects'], {"projects": Projects});
+				_project=Projects;
+				break;
+		
+		case event.path.includes("project") && event.path.includes("id") && !event.path.includes("folder") :
+		
+		
 		try{
-				var Projects = await ProjectsApi.getHubProjects(event.value, {}, oAuth2ThreeLegged, credentials.value).then((Projects)=>
-				
+				var Folders = await ProjectsApi.getProjectTopFolders(hubs.value[event.path[2]].hub.id, event.value, oAuth2ThreeLegged, credentials.value).then((Folders)=>
 				{let newtree={};
-				for (const i in Projects.body.data){
-				newtree[i]={Project:{id:Projects.body.data[i].id
-				,name:Projects.body.data[i].attributes.name}};
+				for (const i in Folders.body.data){
+				newtree[i]={folder:{id:Folders.body.data[i].id
+				,name:Folders.body.data[i].attributes.name}};
 				}			
 				return newtree;});
 				
@@ -162,26 +181,54 @@ async function onSelected (event: unknown) {
 			catch(err){
 				console.log(err);
 			}
-
-			createNestedObject(temp, [event.path.match(/\d+/g)?.[0],'hub','projects'], {"projects": Projects});
+			
+			
+			createNestedObject(temp, [event.path[2],'hub','projects','projects',event.path.match(/\d+/g)?.[1],"Folders"], {"Folders": Folders});
 			
 			break;
+	
+
+	  
+
+	  case event.path.includes("folder") && event.path.includes("id"):
+		//'/.1.hub.projects.projects.0.Folders.Folders.0.folder.id'
 		
-		case event.path.includes("project") && event.path.includes("id"):
-		
+		// try{
+		// 		var contents = await FoldersApi.getFolderContents('b.085b137c-d381-4b1e-a5b6-2be5d6bdd133', event.value, oAuth2ThreeLegged, credentials.value).then((contents)=>
+		// 		{return contents});
+				
+		// 	}
+		// 	catch(err){
+		// 		console.log(err);
+		// 	}
+		// 	console.log(oAuth2ThreeLegged);
+		// 	console.log(credentials.value);
+		// 	//createNestedObject(temp, [event.path[2],'hub','projects','projects',event.path.match(/\d+/g)?.[1],"Folders"], {"Folders": Folders});
+		// 	console.log(_project[event.path.match(/\d+/g)?.[1]].Project.id);
+		// 	console.log(event.value);
+		// 	break;
 		
 		try{
-				var Folders = await ProjectsApi.getProjectTopFolders(hubs.value[event.path[2]].hub.id, event.value, oAuth2ThreeLegged, credentials.value).then((Folders)=>
-				{return Folders});
-				
-			}
-			catch(err){
-				console.log(err);
-			}
-			
-			
-			createNestedObject(temp, [event.path[2],'hub','projects','projects',event.path.match(/\d+/g)?.[1],"Folders"], {"Folders": Folders}); ;
-			break;
+			var contents = await $fetch(`https://developer.api.autodesk.com/data/v1/projects/${_project[event.path.match(/\d+/g)?.[1]].Project.id}/folders/${event.value}/contents`, { method: 'GET', headers: { Authorization:'Bearer '+credentials.value.access_token } }).then(
+				(contents)=>
+				{let newtree={};
+				for (const i in contents.data){
+				newtree[i]={folder:{id:contents.data[i].id
+				,name:contents.data[i].attributes.name}};
+				}			
+				return newtree;}
+			)
+		}
+		catch(err){
+			console.log(err);
+		}
+		
+		var count=0;
+		let contentList=[event.path[2],'hub','projects','projects',event.path.match(/\d+/g)?.[1],"Folders","Folders",event.path.match(/\d+/g)?.[2],'folder','contents'];
+		createNestedObject(temp, contentList, {"contents": contents});
+		
+		break;
+
 	
 
 	  }
